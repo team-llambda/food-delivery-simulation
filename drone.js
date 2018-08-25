@@ -17,12 +17,12 @@ const getBaseLocation = droneInUse => {
 	const startY = wH * 0.75 - 320 + 32 * (droneInUse * 1.25 + 1)
 
 	return {
-		x: startX,
+		x: startX - 16,
 		y: startY
 	}
 }
 
-const sendDrone = async (x, y) => {
+const sendDrone = async (x, y, drink) => {
 	var droneInUse = droneAvailable()
 	if (droneInUse === -1) {
 		return
@@ -45,11 +45,31 @@ const sendDrone = async (x, y) => {
 		.attr('y', startY)
 		.style('opacity', 0)
 
+	var droneDrink = svg
+		.append('svg:text')
+		.attr('id', orderCounter + '-drink')
+		.attr('x', startX + 16)
+		.attr('y', startY + 48)
+		.attr('font-family', 'Sofia Pro')
+		.attr('font-size', 16)
+		.attr('fill', 'white')
+		.attr('stroke', 'white')
+		.style('text-anchor', 'middle')
+		.style('opacity', 0)
+		.text(() => {
+			return '#' + orderCounter + ': ' + drink
+		})
+
 	drone
 		.transition()
 		.style('opacity', 1)
 		.attr('width', 32)
 		.attr('height', 32)
+		.duration(1000)
+
+	droneDrink
+		.transition()
+		.style('opacity', 1)
 		.duration(1000)
 
 	await sleep(1000)
@@ -65,6 +85,13 @@ const sendDrone = async (x, y) => {
 		.duration(length * 2)
 		.ease(d3.easeLinear)
 
+	droneDrink
+		.transition()
+		.attr('x', x + 16)
+		.attr('y', y + 48)
+		.duration(length * 2)
+		.ease(d3.easeLinear)
+
 	await sleep(length * 2)
 
 	drone
@@ -73,7 +100,18 @@ const sendDrone = async (x, y) => {
 		.attr('height', 16)
 		.duration(1000)
 
-	await sleep(3000)
+	await sleep(1000)
+
+	droneDrink
+		.transition()
+		.style('opacity', 0)
+		.duration(1000)
+
+	await sleep(1000)
+
+	droneDrink.remove()
+
+	await sleep(1000)
 
 	drone
 		.transition()

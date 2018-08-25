@@ -36,6 +36,24 @@ var tableData = [
 		w: 64,
 		x: 64,
 		y: 64 * 9
+	},
+	{
+		h: 64 * 3,
+		w: 96,
+		x: 64 * 4,
+		y: 64
+	},
+	{
+		h: 64 * 3,
+		w: 96,
+		x: 64 * 4,
+		y: 64 * 7
+	},
+	{
+		h: 64,
+		w: 64 * 10,
+		x: 64 * 8,
+		y: 64
 	}
 ]
 
@@ -68,7 +86,7 @@ tableData.forEach((table, index) => {
 		node: indoorGroup
 			.append('svg:rect')
 			.attr('id', index)
-			.attr('fill', 'white')
+			.attr('fill', '#795231')
 			.attr('height', table.h)
 			.attr('width', table.w)
 			.attr('x', table.x)
@@ -93,3 +111,5 @@ svg.on('mousemove', function() {
 	mouseX = d3.mouse(this)[0]
 	mouseY = d3.mouse(this)[1]
 })
+
+var inProgressGroup = svg.append('svg:g').attr('id', 'queue-group')
